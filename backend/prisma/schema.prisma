@@ -154,15 +154,14 @@ model ExportJob {
   format        String   // "PDF", "DOCX" (future)
   
   // Job status
-  status        String   // "pending", "processing", "completed", "failed"
-  fileUrl       String?  // S3 URL or local path
-  fileSize      Int?     // in bytes
+  status        String   
+  fileUrl       String?  
+  fileSize      Int?     
   
   // Request context
   userId        String
   user          User     @relation(fields: [userId], references: [id])
   
-  // Timestamps
   createdAt     DateTime @default(now())
   completedAt   DateTime?
   errorMessage  String?
