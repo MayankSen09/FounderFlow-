@@ -1,7 +1,7 @@
-// Advanced SOP Templates Library
+// Advanced Playbook Templates Library
 // Comprehensive templates tailored for Startup Founders
 
-export interface SOPTemplate {
+export interface PlaybookTemplate {
     id: string;
     name: string;
     category: string;
@@ -43,7 +43,7 @@ export interface TemplateParameter {
 // TEMPLATE DEFINITIONS
 // ============================================================================
 
-export const SOP_TEMPLATES: SOPTemplate[] = [
+export const Playbook_TEMPLATES: PlaybookTemplate[] = [
     {
         id: 'technical-hiring',
         name: 'Technical Founder Hiring',
@@ -267,16 +267,16 @@ export const SOP_TEMPLATES: SOPTemplate[] = [
     }
 ];
 
-export function getTemplateById(id: string): SOPTemplate | undefined {
-    return SOP_TEMPLATES.find(template => template.id === id);
+export function getTemplateById(id: string): PlaybookTemplate | undefined {
+    return Playbook_TEMPLATES.find(template => template.id === id);
 }
 
-export function getTemplatesByCategory(category: string): SOPTemplate[] {
-    return SOP_TEMPLATES.filter(template => template.category === category);
+export function getTemplatesByCategory(category: string): PlaybookTemplate[] {
+    return Playbook_TEMPLATES.filter(template => template.category === category);
 }
 
-export function getTemplatesByIndustry(industry: string): SOPTemplate[] {
-    return SOP_TEMPLATES.filter(template => template.industry.includes(industry));
+export function getTemplatesByIndustry(industry: string): PlaybookTemplate[] {
+    return Playbook_TEMPLATES.filter(template => template.industry.includes(industry));
 }
 
-export const TEMPLATE_IDS = SOP_TEMPLATES.map(t => t.id);
+export const TEMPLATE_IDS = Playbook_TEMPLATES.map(t => t.id);

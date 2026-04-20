@@ -34,10 +34,10 @@ router.post('/sessions/:id/input', (req: any, res) => wizardController.submitInp
 
 /**
  * @route   POST /api/v1/wizard/sessions/:id/generate
- * @desc    Generate final SOP from wizard session
+ * @desc    Generate final Playbook from wizard session
  */
 router.post('/sessions/:id/generate', aiEndpointLimiter, (req: any, res) =>
-    wizardController.generateSOP(req, res)
+    wizardController.generatePlaybook(req, res)
 );
 
 export default router;

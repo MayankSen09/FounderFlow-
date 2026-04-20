@@ -17,7 +17,7 @@ type Step = 'type' | 'industry' | 'goal' | 'questions' | 'generating' | 'preview
 
 export default function FunnelBuilder() {
     const navigate = useNavigate();
-    const { createSOP } = useData();
+    const { createPlaybook } = useData();
     const { success, error: showError } = useToast();
 
     const [currentStep, setCurrentStep] = useState<Step>('type');
@@ -112,16 +112,16 @@ export default function FunnelBuilder() {
     const handleSave = () => {
         if (!generatedFunnel) return;
 
-        const sopContent = JSON.stringify({
+        const playbookContent = JSON.stringify({
             funnelType: 'Marketing Funnel',
             ...generatedFunnel,
             stages: generatedFunnel.stages || generatedFunnel.template.stages
         });
 
-        createSOP({
+        createPlaybook({
             title: `${generatedFunnel.template.name} System - ${INDUSTRIES[generatedFunnel.industry as Industry].name}`,
             departmentId: '1',
-            content: sopContent,
+            content: playbookContent,
             status: 'Draft',
             currentVersion: 1,
             createdBy: 'architect',
@@ -131,7 +131,7 @@ export default function FunnelBuilder() {
         });
 
         success('Architecture committed to ledger.');
-        navigate('/sops');
+        navigate('/playbooks');
     };
 
     const containerVariants: Variants = {

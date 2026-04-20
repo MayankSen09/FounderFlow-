@@ -46,7 +46,7 @@ export class DashboardController {
 
     /**
      * GET /api/v1/dashboard/trends
-     * Get SOP creation trends
+     * Get Playbook creation trends
      */
     async getTrends(req: AuthRequest, res: Response): Promise<void> {
         try {
@@ -56,7 +56,7 @@ export class DashboardController {
             }
 
             const days = parseInt(req.query.days as string) || 30;
-            const trends = await analyticsService.getSOPTrends(req.user.id, req.user.role, days);
+            const trends = await analyticsService.getPlaybookTrends(req.user.id, req.user.role, days);
             res.json({ success: true, data: trends });
         } catch (error: any) {
             res.status(500).json({ success: false, error: error.message });
@@ -64,7 +64,7 @@ export class DashboardController {
     }
 
     /**
-     * POST /api/v1/dashboard/export/:sopId
+     * POST /api/v1/dashboard/export/:playbookId
      * Queue PDF export
      */
     async queueExport(req: AuthRequest, res: Response): Promise<void> {
@@ -75,7 +75,7 @@ export class DashboardController {
             }
 
             const { format } = req.body;
-            const job = await pdfService.queueExport(req.params.sopId, req.user.id, format);
+            const job = await pdfService.queueExport(req.params.playbookId, req.user.id, format);
             res.status(202).json({ success: true, data: job });
         } catch (error: any) {
             res.status(500).json({ success: false, error: error.message });

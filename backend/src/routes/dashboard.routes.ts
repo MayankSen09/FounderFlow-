@@ -21,15 +21,15 @@ router.get('/activity', (req: any, res) => dashboardController.getActivity(req, 
 
 /**
  * @route   GET /api/v1/dashboard/trends
- * @desc    Get SOP creation trends
+ * @desc    Get Playbook creation trends
  */
 router.get('/trends', (req: any, res) => dashboardController.getTrends(req, res));
 
 /**
- * @route   POST /api/v1/dashboard/export/:sopId
- * @desc    Queue PDF export for SOP
+ * @route   POST /api/v1/dashboard/export/:playbookId
+ * @desc    Queue PDF export for Playbook
  */
-router.post('/export/:sopId', (req: any, res) => dashboardController.queueExport(req, res));
+router.post('/export/:playbookId', (req: any, res) => dashboardController.queueExport(req, res));
 
 /**
  * @route   GET /api/v1/dashboard/exports

@@ -23,7 +23,7 @@ const MOCK_NOTIFICATIONS: Notification[] = [
     {
         id: '2',
         title: 'System Update',
-        message: 'New AI models have been integrated into the SOP Wizard.',
+        message: 'New AI models have been integrated into the Playbook Wizard.',
         time: '1 hour ago',
         type: 'info',
         read: false

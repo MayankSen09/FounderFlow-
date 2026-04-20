@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import authRoutes from './auth.routes';
-import sopRoutes from './sop.routes';
+import playbookRoutes from './playbook.routes';
 import wizardRoutes from './wizard.routes';
 import dashboardRoutes from './dashboard.routes';
 import demoRoutes from './demo.routes';
@@ -18,7 +18,7 @@ router.get('/health', (_req, res) => {
 
 // Mount routes
 router.use('/auth', authRoutes);
-router.use('/sops', sopRoutes);
+router.use('/playbooks', playbookRoutes);
 router.use('/wizard', wizardRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/demo', demoRoutes);

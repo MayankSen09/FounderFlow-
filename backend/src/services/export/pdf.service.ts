@@ -13,28 +13,28 @@ import prisma from '../../config/database';
 
 export class PDFExportService {
     /**
-     * Queue an SOP for PDF export
+     * Queue an Playbook for PDF export
      */
-    async queueExport(sopId: string, userId: string, format: string = 'standard') {
+    async queueExport(playbookId: string, userId: string, format: string = 'standard') {
         try {
-            // Verify SOP exists
-            const sop = await prisma.sOP.findUnique({
-                where: { id: sopId },
+            // Verify Playbook exists
+            const playbook = await prisma.sOP.findUnique({
+                where: { id: playbookId },
             });
 
-            if (!sop) throw new Error('SOP not found');
+            if (!playbook) throw new Error('Playbook not found');
 
             // Create export job
             const job = await prisma.exportJob.create({
                 data: {
-                    sopId,
+                    playbookId,
                     userId,
                     format,
                     status: 'PENDING',
                 },
             });
 
-            logger.info(`PDF export job queued: ${job.id} for SOP: ${sopId}`);
+            logger.info(`PDF export job queued: ${job.id} for Playbook: ${playbookId}`);
 
             // TODO: In production, this would trigger a background worker
             // For now, we'll simulate immediate processing
@@ -97,7 +97,7 @@ export class PDFExportService {
                 userId,
             },
             include: {
-                sop: {
+                playbook: {
                     select: {
                         title: true,
                     },
@@ -118,7 +118,7 @@ export class PDFExportService {
             where: { userId },
             orderBy: { createdAt: 'desc' },
             include: {
-                sop: {
+                playbook: {
                     select: {
                         title: true,
                     },

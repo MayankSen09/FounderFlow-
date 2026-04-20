@@ -9,13 +9,13 @@ export interface User {
     avatarUrl?: string;
 }
 
-export type SOPStatus = 'Draft' | 'Review' | 'Approved' | 'Archived';
+export type PlaybookStatus = 'Draft' | 'Review' | 'Approved' | 'Archived';
 
-export interface SOP {
+export interface Playbook {
     id: string;
     title: string;
     departmentId: string;
-    status: SOPStatus;
+    status: PlaybookStatus;
     currentVersion: number;
     content: string; // HTML/RichText
     createdBy: string;
@@ -25,9 +25,9 @@ export interface SOP {
     teamId?: string; // Added for team collaboration
 }
 
-export interface SOPVersion {
+export interface PlaybookVersion {
     id: string;
-    sopId: string;
+    playbookId: string;
     versionNumber: number;
     content: string;
     changeSummary: string;
@@ -43,7 +43,7 @@ export interface Department {
 
 export interface Comment {
     id: string;
-    sopId: string;
+    playbookId: string;
     userId: string;
     text: string;
     createdAt: string;
@@ -106,7 +106,7 @@ export interface AnalyticsEvent {
     id: string;
     teamId: string;
     userId: string;
-    eventType: 'sop_created' | 'sop_updated' | 'sop_viewed' | 'strategy_generated';
+    eventType: 'playbook_created' | 'playbook_updated' | 'playbook_viewed' | 'strategy_generated';
     resourceId: string;
     timestamp: string;
     metadata?: Record<string, any>;

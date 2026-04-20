@@ -71,10 +71,10 @@ VITE_MAX_AI_REQUESTS_PER_HOUR=50
 ### Input Validation
 
 ```typescript
-import { validateSOPTitle, sanitizePromptInput } from './lib/validation';
+import { validatePlaybookTitle, sanitizePromptInput } from './lib/validation';
 
 // Validate title
-const { valid, error } = validateSOPTitle(userInput);
+const { valid, error } = validatePlaybookTitle(userInput);
 if (!valid) {
   showError(error);
 }

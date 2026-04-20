@@ -1,6 +1,6 @@
 import { jsPDF } from 'jspdf';
 
-export function generateSOPPDF(sopTitle: string, sopContent: any) {
+export function generatePlaybookPDF(playbookTitle: string, playbookContent: any) {
     const doc = new jsPDF();
     let yPos = 20;
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -33,31 +33,31 @@ export function generateSOPPDF(sopTitle: string, sopContent: any) {
     };
 
     // Title
-    addText(sopContent.title || sopTitle, 20, true, '#0891b2');
+    addText(playbookContent.title || playbookTitle, 20, true, '#0891b2');
     yPos += 5;
 
     // Purpose
-    if (sopContent.purpose) {
+    if (playbookContent.purpose) {
         addSection('PURPOSE');
-        addText(sopContent.purpose, 11);
+        addText(playbookContent.purpose, 11);
     }
 
     // Scope
-    if (sopContent.scope) {
+    if (playbookContent.scope) {
         addSection('SCOPE');
-        addText(sopContent.scope, 10);
+        addText(playbookContent.scope, 10);
     }
 
     // Audience
-    if (sopContent.audience) {
+    if (playbookContent.audience) {
         addSection('AUDIENCE');
-        addText(sopContent.audience, 10);
+        addText(playbookContent.audience, 10);
     }
 
     // Steps/Procedures
-    if (sopContent.steps && sopContent.steps.length > 0) {
+    if (playbookContent.steps && playbookContent.steps.length > 0) {
         addSection('PROCEDURES', '#10b981');
-        sopContent.steps.forEach((step: string, idx: number) => {
+        playbookContent.steps.forEach((step: string, idx: number) => {
             const cleanStep = step.replace(/^STEP \d+:\s*/i, '');
             addText(`${idx + 1}. ${cleanStep}`, 10);
             yPos += 3;
@@ -65,9 +65,9 @@ export function generateSOPPDF(sopTitle: string, sopContent: any) {
     }
 
     // Responsible Parties
-    if (sopContent.responsibleParties && sopContent.responsibleParties.length > 0) {
+    if (playbookContent.responsibleParties && playbookContent.responsibleParties.length > 0) {
         addSection('RESPONSIBLE PARTIES', '#a855f7');
-        sopContent.responsibleParties.forEach((party: any) => {
+        playbookContent.responsibleParties.forEach((party: any) => {
             addText(party.role, 11, true);
             if (party.responsibilities) {
                 party.responsibilities.forEach((resp: string) => {
@@ -82,9 +82,9 @@ export function generateSOPPDF(sopTitle: string, sopContent: any) {
     }
 
     // Tools Required
-    if (sopContent.toolsRequired && sopContent.toolsRequired.length > 0) {
+    if (playbookContent.toolsRequired && playbookContent.toolsRequired.length > 0) {
         addSection('TOOLS & RESOURCES', '#3b82f6');
-        sopContent.toolsRequired.forEach((tool: any) => {
+        playbookContent.toolsRequired.forEach((tool: any) => {
             addText(`${tool.name}`, 10, true);
             addText(tool.purpose, 9);
             addText(`Access: ${tool.accessLevel}`, 9, false, '#3b82f6');
@@ -93,9 +93,9 @@ export function generateSOPPDF(sopTitle: string, sopContent: any) {
     }
 
     // KPIs
-    if (sopContent.kpis && sopContent.kpis.length > 0) {
+    if (playbookContent.kpis && playbookContent.kpis.length > 0) {
         addSection('KEY PERFORMANCE INDICATORS', '#10b981');
-        sopContent.kpis.forEach((kpi: any) => {
+        playbookContent.kpis.forEach((kpi: any) => {
             addText(`${kpi.metric}: ${kpi.target}`, 10, true, '#059669');
             addText(kpi.measurement, 9);
             yPos += 3;
@@ -103,17 +103,17 @@ export function generateSOPPDF(sopTitle: string, sopContent: any) {
     }
 
     // Compliance
-    if (sopContent.compliance && sopContent.compliance.length > 0) {
+    if (playbookContent.compliance && playbookContent.compliance.length > 0) {
         addSection('COMPLIANCE REQUIREMENTS', '#f59e0b');
-        sopContent.compliance.forEach((item: string) => {
+        playbookContent.compliance.forEach((item: string) => {
             addText(`• ${item}`, 9);
         });
     }
 
     // Common Errors
-    if (sopContent.commonErrors && sopContent.commonErrors.length > 0) {
+    if (playbookContent.commonErrors && playbookContent.commonErrors.length > 0) {
         addSection('COMMON ERRORS & PREVENTION', '#ef4444');
-        sopContent.commonErrors.forEach((error: any) => {
+        playbookContent.commonErrors.forEach((error: any) => {
             addText(error.error, 10, true, '#dc2626');
             addText(`Consequences: ${error.consequences}`, 9);
             addText(`Prevention: ${error.prevention}`, 9);
@@ -123,35 +123,35 @@ export function generateSOPPDF(sopTitle: string, sopContent: any) {
     }
 
     // Quality Checks
-    if (sopContent.qualityChecks && sopContent.qualityChecks.length > 0) {
+    if (playbookContent.qualityChecks && playbookContent.qualityChecks.length > 0) {
         addSection('QUALITY CHECKS');
-        sopContent.qualityChecks.forEach((check: string) => {
+        playbookContent.qualityChecks.forEach((check: string) => {
             addText(`✓ ${check}`, 9);
         });
     }
 
     // Related Documents
-    if (sopContent.relatedDocuments && sopContent.relatedDocuments.length > 0) {
+    if (playbookContent.relatedDocuments && playbookContent.relatedDocuments.length > 0) {
         addSection('RELATED DOCUMENTS');
-        sopContent.relatedDocuments.forEach((document: string) => {
+        playbookContent.relatedDocuments.forEach((document: string) => {
             addText(`→ ${document}`, 9);
         });
     }
 
     // Revision History
-    if (sopContent.revisionHistory) {
+    if (playbookContent.revisionHistory) {
         addSection('REVISION HISTORY', '#64748b');
-        addText(`Version: ${sopContent.revisionHistory.version}`, 9);
-        addText(`Date: ${sopContent.revisionHistory.date}`, 9);
-        addText(`Author: ${sopContent.revisionHistory.author}`, 9);
-        addText(`Changes: ${sopContent.revisionHistory.changes}`, 9);
+        addText(`Version: ${playbookContent.revisionHistory.version}`, 9);
+        addText(`Date: ${playbookContent.revisionHistory.date}`, 9);
+        addText(`Author: ${playbookContent.revisionHistory.author}`, 9);
+        addText(`Changes: ${playbookContent.revisionHistory.changes}`, 9);
     }
 
     // Footer on last page
     const pageCount = doc.internal.pages.length - 1;
     doc.setFontSize(8);
     doc.setTextColor('#94a3b8');
-    doc.text(`Page ${pageCount} | Generated by SOP System`, margin, doc.internal.pageSize.getHeight() - 10);
+    doc.text(`Page ${pageCount} | Generated by Playbook System`, margin, doc.internal.pageSize.getHeight() - 10);
 
     return doc;
 }

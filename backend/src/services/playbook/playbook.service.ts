@@ -2,13 +2,13 @@ import prisma from '../../config/database';
 import aiService from '../ai/ai.service';
 import logger from '../../utils/logger';
 
-export class SOPService {
+export class PlaybookService {
     /**
-     * Create a new SOP (either manual or via AI)
+     * Create a new Playbook (either manual or via AI)
      */
-    async createSOP(userId: string, data: any, generatedByAI = false) {
+    async createPlaybook(userId: string, data: any, generatedByAI = false) {
         try {
-            const sop = await prisma.sOP.create({
+            const playbook = await prisma.sOP.create({
                 data: {
                     title: data.title,
                     departmentId: data.departmentId || 'general',
@@ -26,27 +26,27 @@ export class SOPService {
             // Log activity
             await prisma.activityLog.create({
                 data: {
-                    type: 'SOP_CREATED',
-                    description: `SOP "${sop.title}" created ${generatedByAI ? 'via AI' : 'manually'}`,
+                    type: 'Playbook_CREATED',
+                    description: `Playbook "${playbook.title}" created ${generatedByAI ? 'via AI' : 'manually'}`,
                     userId,
-                    sopId: sop.id,
+                    playbookId: playbook.id,
                 },
             });
 
-            return sop;
+            return playbook;
         } catch (error) {
-            logger.error('Error in SOPService.createSOP:', error);
+            logger.error('Error in PlaybookService.createPlaybook:', error);
             throw error;
         }
     }
 
     /**
-     * Generate an SOP using AI and then save it
+     * Generate an Playbook using AI and then save it
      */
-    async generateAndSaveSOP(userId: string, prompt: string, industry?: string) {
-        const generatedContent = await aiService.generateSOP(prompt, industry);
+    async generateAndSavePlaybook(userId: string, prompt: string, industry?: string) {
+        const generatedContent = await aiService.generatePlaybook(prompt, industry);
 
-        return this.createSOP(userId, {
+        return this.createPlaybook(userId, {
             title: generatedContent.title,
             purpose: generatedContent.purpose,
             content: generatedContent,
@@ -56,15 +56,15 @@ export class SOPService {
     }
 
     /**
-     * Get all SOPs (for dashboard/list)
+     * Get all Playbooks (for dashboard/list)
      */
-    async getAllSOPs(filters: any = {}) {
+    async getAllPlaybooks(filters: any = {}) {
         const where: any = { deletedAt: null };
 
         if (filters.status) where.status = filters.status;
         if (filters.departmentId) where.departmentId = filters.departmentId;
 
-        const sops = await prisma.sOP.findMany({
+        const playbooks = await prisma.sOP.findMany({
             where,
             orderBy: { updatedAt: 'desc' },
             include: {
@@ -75,18 +75,18 @@ export class SOPService {
         });
 
         // Parse JSON strings back to objects for the response
-        return sops.map(sop => ({
-            ...sop,
-            content: JSON.parse(sop.content as string),
-            metadata: sop.metadata ? JSON.parse(sop.metadata as string) : null,
+        return playbooks.map(playbook => ({
+            ...playbook,
+            content: JSON.parse(playbook.content as string),
+            metadata: playbook.metadata ? JSON.parse(playbook.metadata as string) : null,
         }));
     }
 
     /**
-     * Get single SOP by ID
+     * Get single Playbook by ID
      */
-    async getSOPById(id: string) {
-        const sop = await prisma.sOP.findUnique({
+    async getPlaybookById(id: string) {
+        const playbook = await prisma.sOP.findUnique({
             where: { id },
             include: {
                 createdBy: {
@@ -95,23 +95,23 @@ export class SOPService {
             }
         });
 
-        if (!sop || sop.deletedAt) throw new Error('SOP not found');
+        if (!playbook || playbook.deletedAt) throw new Error('Playbook not found');
 
         return {
-            ...sop,
-            content: JSON.parse(sop.content as string),
-            metadata: sop.metadata ? JSON.parse(sop.metadata as string) : null,
+            ...playbook,
+            content: JSON.parse(playbook.content as string),
+            metadata: playbook.metadata ? JSON.parse(playbook.metadata as string) : null,
         };
     }
 
     /**
-     * Update SOP or create new version
+     * Update Playbook or create new version
      */
-    async updateSOP(id: string, userId: string, updates: any, createNewVersion = false) {
-        const current = await this.getSOPById(id);
+    async updatePlaybook(id: string, userId: string, updates: any, createNewVersion = false) {
+        const current = await this.getPlaybookById(id);
 
         if (createNewVersion) {
-            return this.createSOP(userId, {
+            return this.createPlaybook(userId, {
                 ...current,
                 ...updates,
                 version: current.version + 1,
@@ -133,4 +133,4 @@ export class SOPService {
     }
 }
 
-export default new SOPService();
+export default new PlaybookService();

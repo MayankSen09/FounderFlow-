@@ -75,19 +75,19 @@ export class WizardController {
 
     /**
      * POST /api/v1/wizard/sessions/:id/generate
-     * Generate final SOP from wizard session
+     * Generate final Playbook from wizard session
      */
-    async generateSOP(req: AuthRequest, res: Response): Promise<void> {
+    async generatePlaybook(req: AuthRequest, res: Response): Promise<void> {
         try {
             if (!req.user) {
                 res.status(401).json({ success: false, error: 'Unauthorized' });
                 return;
             }
 
-            const sop = await wizardService.generateFromSession(req.params.id, req.user.id);
-            res.status(201).json({ success: true, data: sop });
+            const playbook = await wizardService.generateFromSession(req.params.id, req.user.id);
+            res.status(201).json({ success: true, data: playbook });
         } catch (error: any) {
-            logger.error('Error generating SOP from wizard:', error);
+            logger.error('Error generating Playbook from wizard:', error);
             res.status(400).json({ success: false, error: error.message });
         }
     }

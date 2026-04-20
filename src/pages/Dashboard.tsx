@@ -141,7 +141,7 @@ export function Dashboard() {
                                 {[
                                     { icon: Calculator, label: 'Runway & Burn', desc: 'Financial projections', to: '/roi-calculator' },
                                     { icon: Compass, label: 'Strategy Matrix', desc: 'Founder frameworks', to: '/strategy' },
-                                    { icon: FileText, label: 'Playbook Generator', desc: 'AI-powered SOPs', to: '/advanced-sop' },
+                                    { icon: FileText, label: 'Playbook Generator', desc: 'AI-powered Playbooks', to: '/advanced-playbook' },
                                     { icon: Layers, label: 'Growth Funnel', desc: 'Customer journey', to: '/funnel-builder' },
                                 ].map(tool => (
                                     <button key={tool.to} onClick={() => navigate(tool.to)} className="flex items-center gap-3 p-4 rounded-xl stat-bg hover:card-bg-hover border border-transparent hover:border-default transition-all text-left group">

@@ -35,7 +35,7 @@ const DEFAULT_TEAM_SETTINGS: TeamSettings = {
 
 export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [teams, setTeams] = useState<Team[]>(() => {
-        const saved = localStorage.getItem('sop_teams');
+        const saved = localStorage.getItem('playbook_teams');
         if (saved) return JSON.parse(saved);
 
         // Create default personal workspace
@@ -51,7 +51,7 @@ export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
 
     const [currentTeam, setCurrentTeam] = useState<Team | null>(() => {
-        const savedId = localStorage.getItem('sop_current_team_id');
+        const savedId = localStorage.getItem('playbook_current_team_id');
         if (savedId) {
             const team = teams.find(t => t.id === savedId);
             return team || teams[0];
@@ -60,22 +60,22 @@ export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
 
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>(() => {
-        const saved = localStorage.getItem('sop_team_members');
+        const saved = localStorage.getItem('playbook_team_members');
         return saved ? JSON.parse(saved) : [];
     });
 
     // Persist to localStorage
     useEffect(() => {
-        localStorage.setItem('sop_teams', JSON.stringify(teams));
+        localStorage.setItem('playbook_teams', JSON.stringify(teams));
     }, [teams]);
 
     useEffect(() => {
-        localStorage.setItem('sop_team_members', JSON.stringify(teamMembers));
+        localStorage.setItem('playbook_team_members', JSON.stringify(teamMembers));
     }, [teamMembers]);
 
     useEffect(() => {
         if (currentTeam) {
-            localStorage.setItem('sop_current_team_id', currentTeam.id);
+            localStorage.setItem('playbook_current_team_id', currentTeam.id);
         }
     }, [currentTeam]);
 

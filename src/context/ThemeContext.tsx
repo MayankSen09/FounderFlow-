@@ -14,7 +14,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [theme, setThemeState] = useState<Theme>(() => {
         // Check localStorage first
-        const saved = localStorage.getItem('sop_theme') as Theme;
+        const saved = localStorage.getItem('playbook_theme') as Theme;
         if (saved) return saved;
 
         // Check system preference
@@ -27,7 +27,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     useEffect(() => {
         // Save to localStorage
-        localStorage.setItem('sop_theme', theme);
+        localStorage.setItem('playbook_theme', theme);
 
         // Apply theme class to document
         const root = document.documentElement;

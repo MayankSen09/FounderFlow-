@@ -4,7 +4,7 @@ import logger from '../../utils/logger';
 
 export class WizardService {
     /**
-     * Create a new wizard session for conversational SOP creation
+     * Create a new wizard session for conversational Playbook creation
      */
     async createSession(userId: string, initialInput?: string, mode: string = 'prompts') {
         try {
@@ -107,7 +107,7 @@ export class WizardService {
     }
 
     /**
-     * Generate final SOP from wizard session
+     * Generate final Playbook from wizard session
      */
     async generateFromSession(sessionId: string, userId: string) {
         const session = await this.getSession(sessionId, userId);
@@ -121,11 +121,11 @@ export class WizardService {
         // Combine all user inputs into a comprehensive prompt
         const combinedPrompt = stepData.userInputs.join('\n\n');
 
-        // Generate SOP using AI
-        const generatedContent = await aiService.generateSOP(combinedPrompt);
+        // Generate Playbook using AI
+        const generatedContent = await aiService.generatePlaybook(combinedPrompt);
 
-        // Create SOP record
-        const sop = await prisma.sOP.create({
+        // Create Playbook record
+        const playbook = await prisma.sOP.create({
             data: {
                 title: generatedContent.title,
                 departmentId: 'general',
@@ -140,26 +140,26 @@ export class WizardService {
             },
         });
 
-        // Link session to generated SOP
+        // Link session to generated Playbook
         await prisma.wizardSession.update({
             where: { id: sessionId },
-            data: { sopId: sop.id },
+            data: { playbookId: playbook.id },
         });
 
         // Log activity
         await prisma.activityLog.create({
             data: {
-                type: 'SOP_CREATED',
-                description: `SOP "${sop.title}" created via Wizard`,
+                type: 'Playbook_CREATED',
+                description: `Playbook "${playbook.title}" created via Wizard`,
                 userId,
-                sopId: sop.id,
+                playbookId: playbook.id,
             },
         });
 
         return {
-            ...sop,
-            content: JSON.parse(sop.content),
-            metadata: sop.metadata ? JSON.parse(sop.metadata as string) : null,
+            ...playbook,
+            content: JSON.parse(playbook.content),
+            metadata: playbook.metadata ? JSON.parse(playbook.metadata as string) : null,
         };
     }
 
@@ -168,11 +168,11 @@ export class WizardService {
      */
     private getStepPrompt(step: number) {
         const prompts = [
-            { step: 1, question: "What's the title or main topic of this SOP?" },
+            { step: 1, question: "What's the title or main topic of this Playbook?" },
             { step: 2, question: "What's the primary purpose of this procedure? Who will use it?" },
             { step: 3, question: "Can you describe the main steps involved in this process?" },
             { step: 4, question: "Are there any specific warnings, compliance requirements, or safety notes?" },
-            { step: 5, question: "What tools, resources, or systems are needed to complete this SOP?" },
+            { step: 5, question: "What tools, resources, or systems are needed to complete this Playbook?" },
         ];
 
         return prompts.find(p => p.step === step) || prompts[0];

@@ -51,7 +51,7 @@ Input your metrics and align with proven founder frameworks — Lean Startup, Bl
 Financial projections with 12-month cash exhaustion modeling. Track net burn, runway, MRR, and campaign ROI.
 
 ### 📋 Playbook Generator
-AI-powered SOP generation with startup-specific templates: Technical Founder Hiring, Product-Market Fit Discovery, and Investor Relations.
+AI-powered Playbook generation with startup-specific templates: Technical Founder Hiring, Product-Market Fit Discovery, and Investor Relations.
 
 ### 🔄 Growth Funnel Architect
 Build and visualize customer acquisition funnels with AI-generated stage strategies, channel recommendations, and optimization tips.
@@ -70,7 +70,7 @@ founderflow/
 │   │   ├── FundingTracker.tsx    # Investor Pipeline Manager
 │   │   ├── StrategyGenerator.tsx # Founder Frameworks
 │   │   ├── ROICalculator.tsx     # Runway & Burn
-│   │   ├── AdvancedSOPGenerator.tsx # Playbook Generator
+│   │   ├── AdvancedPlaybookGenerator.tsx # Playbook Generator
 │   │   ├── FunnelBuilder.tsx     # Growth Funnel
 │   │   └── Settings.tsx          # Profile & Startup Config
 │   ├── context/
@@ -81,7 +81,7 @@ founderflow/
 │   │   └── ThemeContext.tsx      # Dark/light mode
 │   ├── lib/
 │   │   ├── ai.ts                # Gemini API integration
-│   │   └── sopTemplates.ts      # Startup playbook templates
+│   │   └── playbookTemplates.ts      # Startup playbook templates
 │   └── components/
 │       ├── Layout/              # Sidebar, Header, Layout
 │       └── FunnelBuilder/       # Funnel visualization components

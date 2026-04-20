@@ -1,9 +1,9 @@
 import config from '../../config/env';
 import { getAIClient } from '../../config/ai';
 import logger from '../../utils/logger';
-import { SOP_GENERATION_PROMPT, REFINE_SOP_PROMPT } from './prompts';
+import { Playbook_GENERATION_PROMPT, REFINE_Playbook_PROMPT } from './prompts';
 
-export interface GeneratedSOP {
+export interface GeneratedPlaybook {
     title: string;
     purpose: string;
     scope: string;
@@ -46,15 +46,15 @@ export class AIService {
     }
 
     /**
-     * Generates a complete SOP from a brief description or title
+     * Generates a complete Playbook from a brief description or title
      */
-    async generateSOP(input: string, industry?: string): Promise<GeneratedSOP> {
+    async generatePlaybook(input: string, industry?: string): Promise<GeneratedPlaybook> {
         const startTime = Date.now();
-        logger.info(`Starting SOP generation for: ${input.substring(0, 50)}...`);
+        logger.info(`Starting Playbook generation for: ${input.substring(0, 50)}...`);
 
         try {
             const prompt = `
-        ${SOP_GENERATION_PROMPT}
+        ${Playbook_GENERATION_PROMPT}
         
         [User Input]:
         Title/Topic: ${input}
@@ -74,24 +74,24 @@ export class AIService {
             try {
                 const parsed = JSON.parse(text);
                 const duration = Date.now() - startTime;
-                logger.info(`SOP generated successfully in ${duration}ms`);
-                return parsed as GeneratedSOP;
+                logger.info(`Playbook generated successfully in ${duration}ms`);
+                return parsed as GeneratedPlaybook;
             } catch (parseError) {
                 logger.error('Failed to parse AI response as JSON:', text);
                 throw new Error('AI produced an invalid response format');
             }
         } catch (error) {
-            logger.error('Error in AIService.generateSOP:', error);
+            logger.error('Error in AIService.generatePlaybook:', error);
             throw error;
         }
     }
 
     /**
-     * Refines an existing SOP based on feedback
+     * Refines an existing Playbook based on feedback
      */
-    async refineSOP(originalContent: string, feedback: string): Promise<GeneratedSOP> {
+    async refinePlaybook(originalContent: string, feedback: string): Promise<GeneratedPlaybook> {
         try {
-            const prompt = REFINE_SOP_PROMPT
+            const prompt = REFINE_Playbook_PROMPT
                 .replace('{{originalContent}}', originalContent)
                 .replace('{{feedback}}', feedback);
 
@@ -103,9 +103,9 @@ export class AIService {
             let text = response.text();
             text = this.cleanJsonString(text);
 
-            return JSON.parse(text) as GeneratedSOP;
+            return JSON.parse(text) as GeneratedPlaybook;
         } catch (error) {
-            logger.error('Error in AIService.refineSOP:', error);
+            logger.error('Error in AIService.refinePlaybook:', error);
             throw error;
         }
     }

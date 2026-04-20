@@ -54,7 +54,7 @@ app.get('/', (_req, res) => {
             api: `/api/${config.apiVersion}`,
             endpoints: {
                 auth: `/api/${config.apiVersion}/auth`,
-                sops: `/api/${config.apiVersion}/sops`,
+                playbooks: `/api/${config.apiVersion}/playbooks`,
                 wizard: `/api/${config.apiVersion}/wizard`,
                 dashboard: `/api/${config.apiVersion}/dashboard`,
             },

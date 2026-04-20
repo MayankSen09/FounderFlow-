@@ -13,7 +13,7 @@ if (!apiKey) {
     throw new Error('AI service configuration error. Please contact support.');
 }
 
-export async function generateSOPContent(title: string, purpose: string, rawSteps: string) {
+export async function generatePlaybookContent(title: string, purpose: string, rawSteps: string) {
 {
     try {
         const sanitizedTitle = sanitizePromptInput(title);
@@ -39,7 +39,7 @@ Return ONLY valid JSON (no markdown, no code blocks, no explanations). The JSON 
     "title": "Professional, action-oriented title",
     "purpose": "Clear, compelling purpose statement (2-3 sentences)",
     "scope": "Detailed scope covering what IS and ISN'T included",
-    "audience": "Specific roles and teams who will use this SOP",
+    "audience": "Specific roles and teams who will use this Playbook",
     "steps": [
         "STEP 1: [Action Verb] - [Clear instruction with specific details]",
         "STEP 2: [Action Verb] - [Include tools, timelines, responsible parties]",
@@ -51,7 +51,7 @@ Return ONLY valid JSON (no markdown, no code blocks, no explanations). The JSON 
     "qualityChecks": ["Checkpoint 1", "Checkpoint 2"],
     "kpis": [{"metric": "KPI Name", "target": "Target value", "measurement": "How to measure"}],
     "commonErrors": [{"error": "Mistake", "consequences": "Impact", "prevention": "How to prevent", "resolution": "How to fix"}],
-    "revisionHistory": {"version": "1.0", "date": "${new Date().toISOString().split('T')[0]}", "author": "AI SOP Generator", "changes": "Initial creation"},
+    "revisionHistory": {"version": "1.0", "date": "${new Date().toISOString().split('T')[0]}", "author": "AI Playbook Generator", "changes": "Initial creation"},
     "approvalChain": ["Role 1", "Role 2"],
     "relatedDocuments": ["Document 1"],
     "appendix": {"definitions": {}, "templates": [], "contacts": []}
@@ -103,11 +103,11 @@ Return ONLY the JSON object. No markdown formatting, no code blocks, no explanat
             console.error('Raw response:', cleanText.substring(0, 500));
 
             // Return fallback structure
-            console.log('⚠️ Using fallback SOP structure');
+            console.log('⚠️ Using fallback Playbook structure');
             return {
                 title,
                 purpose,
-                scope: "This SOP covers the complete workflow and procedures required.",
+                scope: "This Playbook covers the complete workflow and procedures required.",
                 audience: "All relevant team members and stakeholders",
                 steps: rawSteps.split('\n').filter(s => s.trim()).map((step, idx) =>
                     `STEP ${idx + 1}: ${step.trim()}`
@@ -118,7 +118,7 @@ Return ONLY the JSON object. No markdown formatting, no code blocks, no explanat
                 qualityChecks: ["Review outputs", "Verify compliance", "Document completion"],
                 kpis: [{ metric: "Completion Rate", target: "95%", measurement: "Monthly tracking" }],
                 commonErrors: [{ error: "Missing docs", consequences: "Incomplete trail", prevention: "Use checklists", resolution: "Backfill" }],
-                revisionHistory: { version: "1.0", date: new Date().toISOString().split('T')[0], author: "AI SOP Generator", changes: "Initial creation" },
+                revisionHistory: { version: "1.0", date: new Date().toISOString().split('T')[0], author: "AI Playbook Generator", changes: "Initial creation" },
                 approvalChain: ["Team Lead", "Manager"],
                 relatedDocuments: ["Company policies"],
                 appendix: { definitions: {}, templates: [], contacts: [] }
@@ -356,10 +356,10 @@ export async function generateWithAI(prompt: string): Promise<string> {
 }
 
 // ------------------------------------------------------------------
-// ADVANCED SOP GENERATION
+// ADVANCED Playbook GENERATION
 // ------------------------------------------------------------------
 
-export async function generateAdvancedSOP(
+export async function generateAdvancedPlaybook(
     templateId: string,
     title: string,
     industry: string,
@@ -371,9 +371,9 @@ export async function generateAdvancedSOP(
         const safeIndustry = sanitizePromptInput(industry);
         const safeParams = sanitizePromptInput(parameters);
 
-        console.log('🚀 Starting Advanced SOP generation...', { templateId: safeTemplateId, title: safeTitle, industry: safeIndustry });
+        console.log('🚀 Starting Advanced Playbook generation...', { templateId: safeTemplateId, title: safeTitle, industry: safeIndustry });
 
-        const prompt = `You are an elite Standard Operating Procedure (SOP) architect with 20+ years of experience creating world-class operational documentation for Fortune 500 companies.
+        const prompt = `You are an elite Standard Operating Procedure (Playbook) architect with 20+ years of experience creating world-class operational documentation for Fortune 500 companies.
 
 **ASSIGNMENT**: Create a comprehensive, professional Standard Operating Procedure document.
 
@@ -387,7 +387,7 @@ export async function generateAdvancedSOP(
 
 1. **Research Industry Best Practices**: Research and incorporate the latest best practices for ${industry} in the ${templateId} domain.
 
-2. **Create Professional Structure**: Generate a detailed SOP with 7-10 phases (sections), where each phase includes:
+2. **Create Professional Structure**: Generate a detailed Playbook with 7-10 phases (sections), where each phase includes:
    - Clear, actionable objective
    - Detailed procedures and steps
    - Tables where appropriate (requirements, frameworks, responsibilities)
@@ -412,7 +412,7 @@ export async function generateAdvancedSOP(
 
 **OUTPUT FORMAT**:
 
-Return the SOP content as plain markdown text with the following structure:
+Return the Playbook content as plain markdown text with the following structure:
 
 # ${title}
 
@@ -455,9 +455,9 @@ Return the SOP content as plain markdown text with the following structure:
 - Include actionable checklists throughout
 - Make it professional enough for enterprise use
 
-Return ONLY the markdown content. No JSON, no explanations, just the formatted SOP document.`;
+Return ONLY the markdown content. No JSON, no explanations, just the formatted Playbook document.`;
 
-        console.log('📡 Calling Gemini API for Advanced SOP...');
+        console.log('📡 Calling Gemini API for Advanced Playbook...');
 
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
@@ -484,9 +484,9 @@ Return ONLY the markdown content. No JSON, no explanations, just the formatted S
         const data = await response.json();
         const markdownContent = data.candidates[0].content.parts[0].text.trim();
 
-        console.log('✅ Advanced SOP generated, length:', markdownContent.length);
+        console.log('✅ Advanced Playbook generated, length:', markdownContent.length);
 
-        // Return structured SOP object
+        // Return structured Playbook object
         return {
             title,
             template: templateId,
@@ -496,14 +496,14 @@ Return ONLY the markdown content. No JSON, no explanations, just the formatted S
             metadata: {
                 version: '1.0',
                 createdAt: new Date().toISOString(),
-                createdBy: 'AI SOP Generator',
+                createdBy: 'AI Playbook Generator',
                 wordCount: markdownContent.split(/\s+/).length
             }
         };
 
     } catch (error: any) {
-        console.error('❌ Advanced SOP Generation Error:', error);
-        throw new Error(`Advanced SOP generation failed: ${error.message || 'Unknown error'}`);
+        console.error('❌ Advanced Playbook Generation Error:', error);
+        throw new Error(`Advanced Playbook generation failed: ${error.message || 'Unknown error'}`);
     }
 }
 

@@ -189,9 +189,9 @@ export function validateUrl(url: string): boolean {
 }
 
 /**
- * Validates SOP title
+ * Validates Playbook title
  */
-export function validateSOPTitle(title: string): { valid: boolean; error?: string } {
+export function validatePlaybookTitle(title: string): { valid: boolean; error?: string } {
     return validateInput(title, 'Title', {
         required: true,
         minLength: 3,
@@ -202,9 +202,9 @@ export function validateSOPTitle(title: string): { valid: boolean; error?: strin
 }
 
 /**
- * Validates SOP purpose/description
+ * Validates Playbook purpose/description
  */
-export function validateSOPPurpose(purpose: string): { valid: boolean; error?: string } {
+export function validatePlaybookPurpose(purpose: string): { valid: boolean; error?: string } {
     const sanitized = sanitizePromptInput(purpose, 2000);
 
     return validateInput(sanitized, 'Purpose', {
@@ -217,9 +217,9 @@ export function validateSOPPurpose(purpose: string): { valid: boolean; error?: s
 }
 
 /**
- * Validates SOP steps/content
+ * Validates Playbook steps/content
  */
-export function validateSOPSteps(steps: string): { valid: boolean; error?: string } {
+export function validatePlaybookSteps(steps: string): { valid: boolean; error?: string } {
     const sanitized = sanitizePromptInput(steps, 10000);
 
     return validateInput(sanitized, 'Steps', {

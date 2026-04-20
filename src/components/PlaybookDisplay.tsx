@@ -1,10 +1,10 @@
 import { Shield, Users, Settings, FileText, AlertTriangle, CheckCircle2, TrendingUp, Book } from 'lucide-react';
 
-interface SOPDisplayProps {
+interface PlaybookDisplayProps {
     content: any;
 }
 
-export function SOPDisplay({ content }: SOPDisplayProps) {
+export function PlaybookDisplay({ content }: PlaybookDisplayProps) {
     if (!content) return null;
 
     return (

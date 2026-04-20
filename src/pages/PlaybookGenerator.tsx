@@ -11,8 +11,8 @@ import {
     BookOpen
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { SOP_TEMPLATES, type SOPTemplate } from '../lib/sopTemplates';
-import { generateAdvancedSOP } from '../lib/ai';
+import { Playbook_TEMPLATES, type PlaybookTemplate } from '../lib/playbookTemplates';
+import { generateAdvancedPlaybook } from '../lib/ai';
 import { useData } from '../context/DataContext';
 import { useToast } from '../context/ToastContext';
 import { Button } from '../components/ui/Button';
@@ -25,15 +25,15 @@ interface FormData {
     [key: string]: any;
 }
 
-export default function AdvancedSOPGenerator() {
+export default function AdvancedPlaybookGenerator() {
     const navigate = useNavigate();
-    const { createSOP } = useData();
+    const { createPlaybook } = useData();
     const { success, error: showError } = useToast();
 
     const [step, setStep] = useState<'template' | 'customize' | 'generating' | 'preview'>('template');
-    const [selectedTemplate, setSelectedTemplate] = useState<SOPTemplate | null>(null);
+    const [selectedTemplate, setSelectedTemplate] = useState<PlaybookTemplate | null>(null);
     const [formData, setFormData] = useState<FormData>({ title: '', industry: '' });
-    const [generatedSOP, setGeneratedSOP] = useState<any>(null);
+    const [generatedPlaybook, setGeneratedPlaybook] = useState<any>(null);
     const [generationProgress, setGenerationProgress] = useState(0);
 
     // Reset everything
@@ -41,12 +41,12 @@ export default function AdvancedSOPGenerator() {
         setStep('template');
         setSelectedTemplate(null);
         setFormData({ title: '', industry: '' });
-        setGeneratedSOP(null);
+        setGeneratedPlaybook(null);
         setGenerationProgress(0);
     };
 
     // Select template
-    const handleTemplateSelect = (template: SOPTemplate) => {
+    const handleTemplateSelect = (template: PlaybookTemplate) => {
         setSelectedTemplate(template);
         setFormData({
             title: '',
@@ -59,7 +59,7 @@ export default function AdvancedSOPGenerator() {
         setStep('customize');
     };
 
-    // Generate SOP
+    // Generate Playbook
     const handleGenerate = async () => {
         if (!selectedTemplate || !formData.title || !formData.industry) {
             showError('Please fill in all required fields');
@@ -81,7 +81,7 @@ export default function AdvancedSOPGenerator() {
         }, 500);
 
         try {
-            const result = await generateAdvancedSOP(
+            const result = await generateAdvancedPlaybook(
                 selectedTemplate.id,
                 formData.title,
                 formData.industry,
@@ -90,14 +90,14 @@ export default function AdvancedSOPGenerator() {
 
             setGenerationProgress(100);
             setTimeout(() => {
-                setGeneratedSOP(result);
+                setGeneratedPlaybook(result);
                 setStep('preview');
                 success('Playbook Generated Successfully!');
             }, 500);
 
         } catch (err: any) {
             console.error('Generation error:', err);
-            showError(err.message || 'Failed to generate SOP');
+            showError(err.message || 'Failed to generate Playbook');
             setStep('customize');
         } finally {
             clearInterval(progressInterval);
@@ -106,29 +106,29 @@ export default function AdvancedSOPGenerator() {
 
     // Save to library
     const handleSave = () => {
-        if (!generatedSOP) return;
+        if (!generatedPlaybook) return;
 
-        createSOP({
-            title: generatedSOP.title,
+        createPlaybook({
+            title: generatedPlaybook.title,
             departmentId: selectedTemplate?.category || 'General',
             status: 'Draft',
-            content: generatedSOP.content,
-            createdBy: 'Advanced SOP Generator'
+            content: generatedPlaybook.content,
+            createdBy: 'Advanced Playbook Generator'
         });
 
-        success('SOP saved to library!');
-        navigate('/sops');
+        success('Playbook saved to library!');
+        navigate('/playbooks');
     };
 
     // Export as Markdown
     const handleExportMarkdown = () => {
-        if (!generatedSOP) return;
+        if (!generatedPlaybook) return;
 
-        const blob = new Blob([generatedSOP.content], { type: 'text/markdown' });
+        const blob = new Blob([generatedPlaybook.content], { type: 'text/markdown' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${generatedSOP.title.replace(/[^a-z0-9]/gi, '_')}.md`;
+        a.download = `${generatedPlaybook.title.replace(/[^a-z0-9]/gi, '_')}.md`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -139,16 +139,16 @@ export default function AdvancedSOPGenerator() {
 
     // Export as PDF
     const handleExportPDF = () => {
-        if (!generatedSOP) return;
+        if (!generatedPlaybook) return;
 
-        import('../lib/pdfExport').then(({ generateSOPPDF }) => {
+        import('../lib/pdfExport').then(({ generatePlaybookPDF }) => {
             // Convert markdown to simple structure for PDF
             const pdfData = {
-                title: generatedSOP.title,
-                content: generatedSOP.content
+                title: generatedPlaybook.title,
+                content: generatedPlaybook.content
             };
-            const doc = generateSOPPDF(pdfData.title, pdfData.content);
-            doc.save(`${generatedSOP.title.replace(/[^a-z0-9]/gi, '_')}.pdf`);
+            const doc = generatePlaybookPDF(pdfData.title, pdfData.content);
+            doc.save(`${generatedPlaybook.title.replace(/[^a-z0-9]/gi, '_')}.pdf`);
             success('PDF exported successfully!');
         }).catch(err => {
             console.error('PDF export failed:', err);
@@ -219,7 +219,7 @@ export default function AdvancedSOPGenerator() {
                         transition={{ duration: 0.3 }}
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {SOP_TEMPLATES.map((template) => (
+                            {Playbook_TEMPLATES.map((template) => (
                                 <TemplateCard
                                     key={template.id}
                                     template={template}
@@ -400,7 +400,7 @@ export default function AdvancedSOPGenerator() {
                                     )}
                                     {generationProgress >= 90 && (
                                         <p className="text-tertiary font-medium animate-pulse">
-                                            🎯 Finalizing your professional SOP...
+                                            🎯 Finalizing your professional Playbook...
                                         </p>
                                     )}
                                 </div>
@@ -423,7 +423,7 @@ export default function AdvancedSOPGenerator() {
                 )}
 
                 {/* STEP 4: Preview */}
-                {step === 'preview' && generatedSOP && (
+                {step === 'preview' && generatedPlaybook && (
                     <motion.div
                         key="preview"
                         initial={{ opacity: 0, y: 20 }}
@@ -439,7 +439,7 @@ export default function AdvancedSOPGenerator() {
                                         <div>
                                             <h2 className="text-3xl font-black">Playbook Generated Successfully!</h2>
                                             <p className="text-white/80 font-medium mt-1">
-                                                {generatedSOP.metadata.wordCount} words • Version {generatedSOP.metadata.version}
+                                                {generatedPlaybook.metadata.wordCount} words • Version {generatedPlaybook.metadata.version}
                                             </p>
                                         </div>
                                     </div>
@@ -472,10 +472,10 @@ export default function AdvancedSOPGenerator() {
                                 </div>
                             </div>
 
-                            {/* SOP Content */}
+                            {/* Playbook Content */}
                             <div className="p-12 bg-white dark:bg-architect-dark">
                                 <div className="max-w-4xl mx-auto prose prose-slate dark:prose-invert prose-headings:font-black prose-h1:text-4xl prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl prose-p:text-base prose-p:leading-relaxed prose-strong:text-brand-primary prose-table:border-collapse prose-th:bg-slate-100 dark:prose-th:bg-architect-card prose-th:p-4 prose-td:p-4 prose-td:border prose-td:border-slate-200 dark:prose-td:border-architect-border">
-                                    <ReactMarkdown>{generatedSOP.content}</ReactMarkdown>
+                                    <ReactMarkdown>{generatedPlaybook.content}</ReactMarkdown>
                                 </div>
                             </div>
 
@@ -489,7 +489,7 @@ export default function AdvancedSOPGenerator() {
                                 </button>
                                 <span className="text-architect-border">•</span>
                                 <button
-                                    onClick={() => navigate('/sops')}
+                                    onClick={() => navigate('/playbooks')}
                                     className="text-sm font-bold text-tertiary hover:text-primary transition-colors uppercase tracking-wider"
                                 >
                                     View All Playbooks
@@ -504,7 +504,7 @@ export default function AdvancedSOPGenerator() {
 }
 
 // Template Card Component
-function TemplateCard({ template, onSelect }: { template: SOPTemplate; onSelect: () => void }) {
+function TemplateCard({ template, onSelect }: { template: PlaybookTemplate; onSelect: () => void }) {
     return (
         <motion.button
             onClick={onSelect}

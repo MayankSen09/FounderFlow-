@@ -14,7 +14,7 @@ import { StrategyGenerator } from './pages/StrategyGenerator';
 import { ROICalculator } from './pages/ROICalculator';
 import { Settings } from './pages/Settings';
 import FunnelBuilder from './pages/FunnelBuilder';
-import AdvancedSOPGenerator from './pages/AdvancedSOPGenerator';
+import AdvancedPlaybookGenerator from './pages/AdvancedPlaybookGenerator';
 import AIAdvisor from './pages/AIAdvisor';
 import FounderJournal from './pages/FounderJournal';
 import FundingTracker from './pages/FundingTracker';
@@ -50,7 +50,7 @@ function AppContent() {
             {/* Strategy & Ops */}
             <Route path="/strategy" element={<PrivateRoute><Layout><StrategyGenerator /></Layout></PrivateRoute>} />
             <Route path="/roi-calculator" element={<PrivateRoute><Layout><ROICalculator /></Layout></PrivateRoute>} />
-            <Route path="/advanced-sop" element={<PrivateRoute><Layout><AdvancedSOPGenerator /></Layout></PrivateRoute>} />
+            <Route path="/advanced-playbook" element={<PrivateRoute><Layout><AdvancedPlaybookGenerator /></Layout></PrivateRoute>} />
             <Route path="/funnel-builder" element={<PrivateRoute><Layout><FunnelBuilder /></Layout></PrivateRoute>} />
             <Route path="/cap-table" element={<PrivateRoute><Layout><CapTable /></Layout></PrivateRoute>} />
 

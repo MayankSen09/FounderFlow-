@@ -12,159 +12,159 @@ datasource db {
 
 // Note: SQLite doesn't support enums, using String instead
 // Valid UserRole values: "ADMIN", "MANAGER", "CONTRIBUTOR", "VIEWER"
-// Valid SOPStatus values: "DRAFT", "IN_REVIEW", "APPROVED", "ARCHIVED"  
-// Valid ActivityType values: "SOP_CREATED", "SOP_UPDATED", "SOP_APPROVED", "SOP_ARCHIVED", "USER_INVITED", "AI_GENERATION", "PDF_EXPORTED"
+// Valid PlaybookStatus values: "DRAFT", "IN_REVIEW", "APPROVED", "ARCHIVED"  
+// Valid ActivityType values: "Playbook_CREATED", "Playbook_UPDATED", "Playbook_APPROVED", "Playbook_ARCHIVED", "USER_INVITED", "AI_GENERATION", "PDF_EXPORTED"
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  passwordHash  String?
-  name          String
-  role          String   @default("VIEWER") // ADMIN | MANAGER | CONTRIBUTOR | VIEWER
-  avatar        String?
-  
+  id           String  @id @default(cuid())
+  email        String  @unique
+  passwordHash String?
+  name         String
+  role         String  @default("VIEWER") // ADMIN | MANAGER | CONTRIBUTOR | VIEWER
+  avatar       String?
+
   // OAuth fields (future use)
-  googleId      String?  @unique
+  googleId      String? @unique
   oauthProvider String?
-  
+
   // Metadata
-  isActive      Boolean  @default(true)
-  lastLoginAt   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  deletedAt     DateTime? // Soft delete
-  
+  isActive    Boolean   @default(true)
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime? // Soft delete
+
   // Relations
-  sopsCreated   SOP[]    @relation("CreatedBy")
-  activities    ActivityLog[]
-  wizardSessions WizardSession[]
-  exportJobs    ExportJob[]
+  playbooksCreated Playbook[]      @relation("CreatedBy")
+  activities       ActivityLog[]
+  wizardSessions   WizardSession[]
+  exportJobs       ExportJob[]
 }
 
-model SOP {
-  id            String    @id @default(cuid())
-  title         String
-  departmentId  String
-  category      String?
-  purpose       String?
-  status        String    @default("DRAFT") // DRAFT | IN_REVIEW | APPROVED | ARCHIVED
-  
+model Playbook {
+  id           String  @id @default(cuid())
+  title        String
+  departmentId String
+  category     String?
+  purpose      String?
+  status       String  @default("DRAFT") // DRAFT | IN_REVIEW | APPROVED | ARCHIVED
+
   // Content (stored as JSON string in SQLite)
-  content       String    // JSON: { title, purpose, procedures, definitions, etc. }
-  metadata      String?   // JSON: { industry, compliance, customFields, etc. }
-  
+  content  String // JSON: { title, purpose, procedures, definitions, etc. }
+  metadata String? // JSON: { industry, compliance, customFields, etc. }
+
   // AI tracking
-  generatedByAI Boolean   @default(false)
+  generatedByAI Boolean @default(false)
   aiPromptId    String?
-  
+
   // Versioning
-  version       Int       @default(1)
-  parentId      String?   // Points to previous version
-  parent        SOP?      @relation("SOPVersions", fields: [parentId], references: [id], onDelete: SetNull)
-  versions      SOP[]     @relation("SOPVersions")
-  
+  version  Int        @default(1)
+  parentId String? // Points to previous version
+  parent   Playbook?  @relation("PlaybookVersions", fields: [parentId], references: [id], onDelete: SetNull)
+  versions Playbook[] @relation("PlaybookVersions")
+
   // Ownership
-  createdById   String
-  createdBy     User      @relation("CreatedBy", fields: [createdById], references: [id])
-  
+  createdById String
+  createdBy   User   @relation("CreatedBy", fields: [createdById], references: [id])
+
   // Team context (future multi-tenancy)
-  teamId        String?
-  
+  teamId String?
+
   // Timestamps
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  publishedAt   DateTime?
-  deletedAt     DateTime? // Soft delete
-  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  deletedAt   DateTime? // Soft delete
+
   // Relations
-  promptLogs    AIPromptLog[]
-  activities    ActivityLog[]
-  exportJobs    ExportJob[]
+  promptLogs AIPromptLog[]
+  activities ActivityLog[]
+  exportJobs ExportJob[]
 }
 
 model AIPromptLog {
-  id            String   @id @default(cuid())
-  
+  id String @id @default(cuid())
+
   // Request details
-  promptType    String   // "sop_generation", "refinement", "wizard_step", etc.
+  promptType     String // "playbook_generation", "refinement", "wizard_step", etc.
   promptTemplate String
-  inputData     String   // JSON string: The data that was sent to AI
-  model         String   // "gemini-1.5-pro", etc.
-  
+  inputData      String // JSON string: The data that was sent to AI
+  model          String // "gemini-1.5-pro", etc.
+
   // Response details
-  output        String?  // JSON string: AI's structured response
-  tokensUsed    Int?
-  latencyMs     Int?
-  
+  output     String? // JSON string: AI's structured response
+  tokensUsed Int?
+  latencyMs  Int?
+
   // Status
-  success       Boolean  @default(true)
-  errorMessage  String?
-  retryCount    Int      @default(0)
-  
+  success      Boolean @default(true)
+  errorMessage String?
+  retryCount   Int     @default(0)
+
   // Context
-  sopId         String?
-  sop           SOP?     @relation(fields: [sopId], references: [id])
-  userId        String?
-  
-  createdAt     DateTime @default(now())
+  playbookId String?
+  playbook   Playbook? @relation(fields: [playbookId], references: [id])
+  userId     String?
+
+  createdAt DateTime @default(now())
 }
 
 model WizardSession {
-  id            String   @id @default(cuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id])
-  
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
   // Session state
-  mode          String   // "prompts" or "freetext"
-  currentStep   Int      @default(1)
-  stepData      String   // JSON string: { step1: {...}, step2: {...}, step3: {...} }
-  
+  mode        String // "prompts" or "freetext"
+  currentStep Int    @default(1)
+  stepData    String // JSON string: { step1: {...}, step2: {...}, step3: {...} }
+
   // Final output
-  sopId         String?  @unique
-  completed     Boolean  @default(false)
-  
+  playbookId String? @unique
+  completed  Boolean @default(false)
+
   // Timestamps
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  completedAt   DateTime?
-  expiresAt     DateTime // Auto-cleanup old sessions
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+  expiresAt   DateTime // Auto-cleanup old sessions
 }
 
 model ActivityLog {
-  id            String   @id @default(cuid())
-  type          String   // SOP_CREATED | SOP_UPDATED | SOP_APPROVED | etc.
-  
+  id   String @id @default(cuid())
+  type String // Playbook_CREATED | Playbook_UPDATED | Playbook_APPROVED | etc.
+
   // Context
-  userId        String?
-  user          User?    @relation(fields: [userId], references: [id])
-  sopId         String?
-  sop           SOP?     @relation(fields: [sopId], references: [id])
-  
+  userId     String?
+  user       User?     @relation(fields: [userId], references: [id])
+  playbookId String?
+  playbook   Playbook? @relation(fields: [playbookId], references: [id])
+
   // Event data
-  description   String
-  metadata      String?  // JSON string: Flexible context (e.g., field changes, old/new values)
-  
-  createdAt     DateTime @default(now())
+  description String
+  metadata    String? // JSON string: Flexible context (e.g., field changes, old/new values)
+
+  createdAt DateTime @default(now())
 }
 
 model ExportJob {
-  id            String   @id @default(cuid())
-  sopId         String
-  sop           SOP      @relation(fields: [sopId], references: [id])
-  format        String   // "PDF", "DOCX" (future)
-  
+  id         String   @id @default(cuid())
+  playbookId String
+  playbook   Playbook @relation(fields: [playbookId], references: [id])
+  format     String // "PDF", "DOCX" (future)
+
   // Job status
-  status        String   
-  fileUrl       String?  
-  fileSize      Int?     
-  
+  status   String
+  fileUrl  String?
+  fileSize Int?
+
   // Request context
-  userId        String
-  user          User     @relation(fields: [userId], references: [id])
-  
-  createdAt     DateTime @default(now())
-  completedAt   DateTime?
-  errorMessage  String?
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt    DateTime  @default(now())
+  completedAt  DateTime?
+  errorMessage String?
 }
 
 model DemoRequest {

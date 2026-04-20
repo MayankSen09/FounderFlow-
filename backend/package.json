@@ -1,7 +1,7 @@
 {
-  "name": "sop-system-backend",
+  "name": "playbook-system-backend",
   "version": "1.0.0",
-  "description": "Backend API for SOP Management System",
+  "description": "Backend API for Playbook Management System",
   "main": "dist/app.js",
   "scripts": {
     "dev": "tsx watch src/app.ts",
@@ -18,7 +18,7 @@
     "format": "prettier --write \"src/**/*.ts\""
   },
   "keywords": [
-    "sop",
+    "playbook",
     "api",
     "ai",
     "backend"

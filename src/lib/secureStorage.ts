@@ -113,13 +113,13 @@ class SecureStorage {
      */
     static migrateAll(): void {
         const knownKeys = [
-            'sop_user',
-            'sop_theme',
-            'sop_sops',
-            'sop_teams',
-            'sop_team_members',
-            'sop_current_team_id',
-            'sop_analytics_events'
+            'playbook_user',
+            'playbook_theme',
+            'playbook_playbooks',
+            'playbook_teams',
+            'playbook_team_members',
+            'playbook_current_team_id',
+            'playbook_analytics_events'
         ];
 
         console.log('🔐 Starting storage migration to encrypted format...');
@@ -139,8 +139,8 @@ class SecureStorage {
  * Session Storage with automatic timeout
  */
 class SessionManager {
-    private static readonly SESSION_KEY = 'sop_session';
-    private static readonly LAST_ACTIVITY_KEY = 'sop_last_activity';
+    private static readonly SESSION_KEY = 'playbook_session';
+    private static readonly LAST_ACTIVITY_KEY = 'playbook_last_activity';
     private static timeoutMs: number = parseInt(import.meta.env.VITE_SESSION_TIMEOUT || '1800000'); // 30 min default
 
     /**

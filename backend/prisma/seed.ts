@@ -9,10 +9,10 @@ async function main() {
     // Create admin user
     const adminPassword = await bcrypt.hash('admin123', 10);
     const admin = await prisma.user.upsert({
-        where: { email: 'admin@sopsystem.com' },
+        where: { email: 'admin@playbooksystem.com' },
         update: {},
         create: {
-            email: 'admin@sopsystem.com',
+            email: 'admin@playbooksystem.com',
             passwordHash: adminPassword,
             name: 'System Administrator',
             role: 'ADMIN',
@@ -25,10 +25,10 @@ async function main() {
     // Create manager user
     const managerPassword = await bcrypt.hash('manager123', 10);
     const manager = await prisma.user.upsert({
-        where: { email: 'manager@sopsystem.com' },
+        where: { email: 'manager@playbooksystem.com' },
         update: {},
         create: {
-            email: 'manager@sopsystem.com',
+            email: 'manager@playbooksystem.com',
             passwordHash: managerPassword,
             name: 'Department Manager',
             role: 'MANAGER',
@@ -41,10 +41,10 @@ async function main() {
     // Create contributor user
     const contributorPassword = await bcrypt.hash('contributor123', 10);
     const contributor = await prisma.user.upsert({
-        where: { email: 'contributor@sopsystem.com' },
+        where: { email: 'contributor@playbooksystem.com' },
         update: {},
         create: {
-            email: 'contributor@sopsystem.com',
+            email: 'contributor@playbooksystem.com',
             passwordHash: contributorPassword,
             name: 'Content Contributor',
             role: 'CONTRIBUTOR',
@@ -54,8 +54,8 @@ async function main() {
 
     console.log('✅ Created contributor user:', contributor.email);
 
-    // Create sample SOP
-    const sampleSOP = await prisma.sOP.create({
+    // Create sample Playbook
+    const samplePlaybook = await prisma.sOP.create({
         data: {
             title: 'Employee Onboarding Process',
             departmentId: 'hr',
@@ -107,15 +107,15 @@ async function main() {
         },
     });
 
-    console.log('✅ Created sample SOP:', sampleSOP.title);
+    console.log('✅ Created sample Playbook:', samplePlaybook.title);
 
     // Create activity log
     await prisma.activityLog.create({
         data: {
-            type: 'SOP_CREATED', // Using string instead of enum
-            description: 'Employee Onboarding Process SOP created',
+            type: 'Playbook_CREATED', // Using string instead of enum
+            description: 'Employee Onboarding Process Playbook created',
             userId: admin.id,
-            sopId: sampleSOP.id,
+            playbookId: samplePlaybook.id,
             metadata: JSON.stringify({ // Convert to JSON string for SQLite
                 department: 'hr',
                 automated: false,
@@ -128,9 +128,9 @@ async function main() {
     console.log('\n🎉 Seeding completed!');
     console.log('\nTest Accounts:');
     console.log('━'.repeat(50));
-    console.log('Admin:       admin@sopsystem.com / admin123');
-    console.log('Manager:     manager@sopsystem.com / manager123');
-    console.log('Contributor: contributor@sopsystem.com / contributor123');
+    console.log('Admin:       admin@playbooksystem.com / admin123');
+    console.log('Manager:     manager@playbooksystem.com / manager123');
+    console.log('Contributor: contributor@playbooksystem.com / contributor123');
     console.log('━'.repeat(50));
 }
 

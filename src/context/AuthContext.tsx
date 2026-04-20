@@ -41,16 +41,16 @@ const MOCK_USERS: Record<UserRole, User> = {
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(() => {
         // Load user from localStorage on mount
-        const saved = localStorage.getItem('sop_user');
+        const saved = localStorage.getItem('playbook_user');
         return saved ? JSON.parse(saved) : null;
     });
 
     // Persist user to localStorage whenever it changes
     useEffect(() => {
         if (user) {
-            localStorage.setItem('sop_user', JSON.stringify(user));
+            localStorage.setItem('playbook_user', JSON.stringify(user));
         } else {
-            localStorage.removeItem('sop_user');
+            localStorage.removeItem('playbook_user');
         }
     }, [user]);
 

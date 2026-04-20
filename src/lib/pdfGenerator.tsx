@@ -103,8 +103,8 @@ const styles = StyleSheet.create({
     }
 });
 
-interface ProfessionalSOPDocumentProps {
-    sopData: any;
+interface ProfessionalPlaybookDocumentProps {
+    playbookData: any;
     metadata: {
         industry?: string;
         category?: string;
@@ -112,12 +112,12 @@ interface ProfessionalSOPDocumentProps {
     };
 }
 
-export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDocumentProps) => (
+export const ProfessionalPlaybookDocument = ({ playbookData, metadata }: ProfessionalPlaybookDocumentProps) => (
     <Document>
         <Page size="A4" style={styles.page}>
             {/* Header */}
             <View style={styles.header}>
-                <Text style={styles.title}>{sopData.title || 'Standard Operating Procedure'}</Text>
+                <Text style={styles.title}>{playbookData.title || 'Standard Operating Procedure'}</Text>
                 <Text style={styles.subtitle}>
                     Industry: {metadata.industry || 'General'} | Category: {metadata.category || 'Operations'} | Version: {metadata.version || '1.0'}
                 </Text>
@@ -127,36 +127,36 @@ export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDo
             </View>
 
             {/* Executive Summary */}
-            {sopData.purpose && (
+            {playbookData.purpose && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>📋 Executive Summary</Text>
                     <View style={styles.highlight}>
-                        <Text style={styles.text}>{sopData.purpose}</Text>
+                        <Text style={styles.text}>{playbookData.purpose}</Text>
                     </View>
                 </View>
             )}
 
             {/* Scope */}
-            {sopData.scope && (
+            {playbookData.scope && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>🎯 Scope</Text>
-                    <Text style={styles.text}>{sopData.scope}</Text>
+                    <Text style={styles.text}>{playbookData.scope}</Text>
                 </View>
             )}
 
             {/* Audience */}
-            {sopData.audience && (
+            {playbookData.audience && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>👥 Target Audience</Text>
-                    <Text style={styles.text}>{sopData.audience}</Text>
+                    <Text style={styles.text}>{playbookData.audience}</Text>
                 </View>
             )}
 
             {/* Responsible Parties */}
-            {sopData.responsibleParties && sopData.responsibleParties.length > 0 && (
+            {playbookData.responsibleParties && playbookData.responsibleParties.length > 0 && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>👔 Roles & Responsibilities</Text>
-                    {sopData.responsibleParties.map((party: any, idx: number) => (
+                    {playbookData.responsibleParties.map((party: any, idx: number) => (
                         <View key={idx} style={styles.box}>
                             <Text style={{ ...styles.text, fontWeight: 'bold', marginBottom: 4 }}>{party.role}</Text>
                             {party.responsibilities && party.responsibilities.map((resp: string, i: number) => (
@@ -173,10 +173,10 @@ export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDo
             )}
 
             {/* Tools Required */}
-            {sopData.toolsRequired && sopData.toolsRequired.length > 0 && (
+            {playbookData.toolsRequired && playbookData.toolsRequired.length > 0 && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>🛠️ Tools & Systems</Text>
-                    {sopData.toolsRequired.map((tool: any, idx: number) => (
+                    {playbookData.toolsRequired.map((tool: any, idx: number) => (
                         <View key={idx} style={styles.box}>
                             <Text style={{ ...styles.text, fontWeight: 'bold' }}>{tool.name}</Text>
                             <Text style={styles.text}>Purpose: {tool.purpose}</Text>
@@ -191,7 +191,7 @@ export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDo
         <Page size="A4" style={styles.page}>
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>📝 Step-by-Step Procedures</Text>
-                {sopData.steps && sopData.steps.map((step: string, idx: number) => (
+                {playbookData.steps && playbookData.steps.map((step: string, idx: number) => (
                     <View key={idx} style={{ marginBottom: 12, paddingLeft: 10 }}>
                         <Text style={styles.step}>
                             {idx + 1}. {step}
@@ -201,17 +201,17 @@ export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDo
             </View>
 
             {/* Quality Checks */}
-            {sopData.qualityChecks && sopData.qualityChecks.length > 0 && (
+            {playbookData.qualityChecks && playbookData.qualityChecks.length > 0 && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>✅ Quality Checkpoints</Text>
-                    {sopData.qualityChecks.map((check: string, idx: number) => (
+                    {playbookData.qualityChecks.map((check: string, idx: number) => (
                         <Text key={idx} style={styles.text}>✓ {check}</Text>
                     ))}
                 </View>
             )}
 
             {/* KPIs */}
-            {sopData.kpis && sopData.kpis.length > 0 && (
+            {playbookData.kpis && playbookData.kpis.length > 0 && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>📊 Key Performance Indicators</Text>
                     <View style={styles.table}>
@@ -220,7 +220,7 @@ export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDo
                             <Text style={styles.tableHeader}>Target</Text>
                             <Text style={styles.tableHeader}>Measurement</Text>
                         </View>
-                        {sopData.kpis.map((kpi: any, idx: number) => (
+                        {playbookData.kpis.map((kpi: any, idx: number) => (
                             <View key={idx} style={styles.tableRow}>
                                 <Text style={styles.tableCell}>{kpi.metric}</Text>
                                 <Text style={styles.tableCell}>{kpi.target}</Text>
@@ -235,10 +235,10 @@ export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDo
         {/* Page 3: Errors & Compliance */}
         <Page size="A4" style={styles.page}>
             {/* Common Errors */}
-            {sopData.commonErrors && sopData.commonErrors.length > 0 && (
+            {playbookData.commonErrors && playbookData.commonErrors.length > 0 && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>⚠️ Common Errors & Resolutions</Text>
-                    {sopData.commonErrors.map((error: any, idx: number) => (
+                    {playbookData.commonErrors.map((error: any, idx: number) => (
                         <View key={idx} style={styles.box}>
                             <Text style={{ ...styles.text, fontWeight: 'bold', color: '#dc2626' }}>
                                 Error: {error.error}
@@ -252,20 +252,20 @@ export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDo
             )}
 
             {/* Compliance */}
-            {sopData.compliance && sopData.compliance.length > 0 && (
+            {playbookData.compliance && playbookData.compliance.length > 0 && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>🔒 Compliance Requirements</Text>
-                    {sopData.compliance.map((item: string, idx: number) => (
+                    {playbookData.compliance.map((item: string, idx: number) => (
                         <Text key={idx} style={styles.text}>• {item}</Text>
                     ))}
                 </View>
             )}
 
             {/* Approval Chain */}
-            {sopData.approvalChain && sopData.approvalChain.length > 0 && (
+            {playbookData.approvalChain && playbookData.approvalChain.length > 0 && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>✍️ Approval Chain</Text>
-                    {sopData.approvalChain.map((approver: string, idx: number) => (
+                    {playbookData.approvalChain.map((approver: string, idx: number) => (
                         <Text key={idx} style={styles.text}>
                             {idx + 1}. {approver}
                         </Text>
@@ -274,21 +274,21 @@ export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDo
             )}
 
             {/* Revision History */}
-            {sopData.revisionHistory && (
+            {playbookData.revisionHistory && (
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>📅 Revision History</Text>
                     <View style={styles.box}>
-                        <Text style={styles.text}>Version: {sopData.revisionHistory.version}</Text>
-                        <Text style={styles.text}>Date: {sopData.revisionHistory.date}</Text>
-                        <Text style={styles.text}>Author: {sopData.revisionHistory.author}</Text>
-                        <Text style={styles.text}>Changes: {sopData.revisionHistory.changes}</Text>
+                        <Text style={styles.text}>Version: {playbookData.revisionHistory.version}</Text>
+                        <Text style={styles.text}>Date: {playbookData.revisionHistory.date}</Text>
+                        <Text style={styles.text}>Author: {playbookData.revisionHistory.author}</Text>
+                        <Text style={styles.text}>Changes: {playbookData.revisionHistory.changes}</Text>
                     </View>
                 </View>
             )}
 
             {/* Footer */}
             <View style={styles.footer}>
-                <Text>Generated by SOPMaster Enterprise Platform | Confidential & Proprietary</Text>
+                <Text>Generated by PlaybookMaster Enterprise Platform | Confidential & Proprietary</Text>
                 <Text>This document is subject to change. Always refer to the latest version in the system.</Text>
             </View>
         </Page>
@@ -296,12 +296,12 @@ export const ProfessionalSOPDocument = ({ sopData, metadata }: ProfessionalSOPDo
 );
 
 // Export function to generate professional PDF
-export async function generateProfessionalPDF(sopData: any, metadata: any) {
-    const blob = await pdf(<ProfessionalSOPDocument sopData={sopData} metadata={metadata} />).toBlob();
+export async function generateProfessionalPDF(playbookData: any, metadata: any) {
+    const blob = await pdf(<ProfessionalPlaybookDocument playbookData={playbookData} metadata={metadata} />).toBlob();
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${sopData.title?.replace(/[^a-z0-9]/gi, '_') || 'SOP'}_v${metadata.version || '1.0'}.pdf`;
+    link.download = `${playbookData.title?.replace(/[^a-z0-9]/gi, '_') || 'Playbook'}_v${metadata.version || '1.0'}.pdf`;
     link.click();
     URL.revokeObjectURL(url);
 }

@@ -38,7 +38,7 @@ const navSections = [
         label: 'Strategy & Ops',
         items: [
             { to: '/strategy', icon: Compass, label: 'Strategy Matrix' },
-            { to: '/advanced-sop', icon: FileText, label: 'Playbook Generator' },
+            { to: '/advanced-playbook', icon: FileText, label: 'Playbook Generator' },
             { to: '/funnel-builder', icon: Layers, label: 'Growth Funnel' },
             { to: '/cap-table', icon: PieChart, label: 'Cap Table Simulator' },
         ],

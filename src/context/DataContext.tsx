@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { SOP, Department } from '../types';
+import type { Playbook, Department } from '../types';
 
 interface DataContextType {
-    sops: SOP[];
+    playbooks: Playbook[];
     departments: Department[];
-    createSOP: (sop: Partial<SOP>) => void;
-    updateSOP: (id: string, updates: Partial<SOP>) => void;
-    deleteSOP: (id: string) => void;
-    getSOP: (id: string) => SOP | undefined;
+    createPlaybook: (playbook: Partial<Playbook>) => void;
+    updatePlaybook: (id: string, updates: Partial<Playbook>) => void;
+    deletePlaybook: (id: string) => void;
+    getPlaybook: (id: string) => Playbook | undefined;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -20,9 +20,9 @@ const INITIAL_DEPARTMENTS: Department[] = [
     { id: 'dept4', name: 'Marketing', description: 'Brand and outreach strategies' },
 ];
 
-const INITIAL_SOPS: SOP[] = [
+const INITIAL_PlaybookS: Playbook[] = [
     {
-        id: 'sop1',
+        id: 'playbook1',
         title: 'New Employee Onboarding',
         departmentId: 'dept2',
         status: 'Approved', // Ensure string literal match
@@ -33,7 +33,7 @@ const INITIAL_SOPS: SOP[] = [
         updatedAt: new Date().toISOString(),
     },
     {
-        id: 'sop2',
+        id: 'playbook2',
         title: 'Server Maintenance Protocol',
         departmentId: 'dept3',
         status: 'Draft',
@@ -46,47 +46,47 @@ const INITIAL_SOPS: SOP[] = [
 ];
 
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [sops, setSops] = useState<SOP[]>(() => {
-        const saved = localStorage.getItem('sop_sops');
-        return saved ? JSON.parse(saved) : INITIAL_SOPS;
+    const [playbooks, setSops] = useState<Playbook[]>(() => {
+        const saved = localStorage.getItem('playbook_playbooks');
+        return saved ? JSON.parse(saved) : INITIAL_PlaybookS;
     });
 
     const [departments] = useState<Department[]>(INITIAL_DEPARTMENTS);
 
     useEffect(() => {
-        localStorage.setItem('sop_sops', JSON.stringify(sops));
-    }, [sops]);
+        localStorage.setItem('playbook_playbooks', JSON.stringify(playbooks));
+    }, [playbooks]);
 
-    const createSOP = (sopData: Partial<SOP>) => {
-        const newSOP: SOP = {
+    const createPlaybook = (playbookData: Partial<Playbook>) => {
+        const newPlaybook: Playbook = {
             id: crypto.randomUUID(),
-            title: sopData.title || 'Untitled SOP',
-            departmentId: sopData.departmentId || 'dept1',
+            title: playbookData.title || 'Untitled Playbook',
+            departmentId: playbookData.departmentId || 'dept1',
             status: 'Draft',
             currentVersion: 1,
-            content: sopData.content || '',
-            createdBy: sopData.createdBy || 'unknown',
+            content: playbookData.content || '',
+            createdBy: playbookData.createdBy || 'unknown',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            ...sopData
+            ...playbookData
         };
-        setSops(prev => [newSOP, ...prev]);
+        setSops(prev => [newPlaybook, ...prev]);
     };
 
-    const updateSOP = (id: string, updates: Partial<SOP>) => {
-        setSops(prev => prev.map(sop =>
-            sop.id === id ? { ...sop, ...updates, updatedAt: new Date().toISOString() } : sop
+    const updatePlaybook = (id: string, updates: Partial<Playbook>) => {
+        setSops(prev => prev.map(playbook =>
+            playbook.id === id ? { ...playbook, ...updates, updatedAt: new Date().toISOString() } : playbook
         ));
     };
 
-    const deleteSOP = (id: string) => {
-        setSops(prev => prev.filter(sop => sop.id !== id));
+    const deletePlaybook = (id: string) => {
+        setSops(prev => prev.filter(playbook => playbook.id !== id));
     };
 
-    const getSOP = (id: string) => sops.find(s => s.id === id);
+    const getPlaybook = (id: string) => playbooks.find(s => s.id === id);
 
     return (
-        <DataContext.Provider value={{ sops, departments, createSOP, updateSOP, deleteSOP, getSOP }}>
+        <DataContext.Provider value={{ playbooks, departments, createPlaybook, updatePlaybook, deletePlaybook, getPlaybook }}>
             {children}
         </DataContext.Provider>
     );

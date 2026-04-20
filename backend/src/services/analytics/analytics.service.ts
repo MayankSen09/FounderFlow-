@@ -11,12 +11,12 @@ export class AnalyticsService {
             const isAdmin = userRole === 'ADMIN';
             const whereClause = isAdmin ? {} : { createdById: userId };
 
-            // Get SOP statistics
-            const totalSOPs = await prisma.sOP.count({
+            // Get Playbook statistics
+            const totalPlaybooks = await prisma.sOP.count({
                 where: { ...whereClause, deletedAt: null },
             });
 
-            const sopsByStatus = await prisma.sOP.groupBy({
+            const playbooksByStatus = await prisma.sOP.groupBy({
                 by: ['status'],
                 where: { ...whereClause, deletedAt: null },
                 _count: true,
@@ -35,7 +35,7 @@ export class AnalyticsService {
                     user: {
                         select: { name: true, avatar: true },
                     },
-                    sop: {
+                    playbook: {
                         select: { title: true },
                     },
                 },
@@ -51,9 +51,9 @@ export class AnalyticsService {
             });
 
             return {
-                sops: {
-                    total: totalSOPs,
-                    byStatus: sopsByStatus.reduce((acc, item) => {
+                playbooks: {
+                    total: totalPlaybooks,
+                    byStatus: playbooksByStatus.reduce((acc, item) => {
                         acc[item.status] = item._count;
                         return acc;
                     }, {} as Record<string, number>),
@@ -99,7 +99,7 @@ export class AnalyticsService {
                     user: {
                         select: { name: true, avatar: true, email: true },
                     },
-                    sop: {
+                    playbook: {
                         select: { title: true, status: true },
                     },
                 },
@@ -122,16 +122,16 @@ export class AnalyticsService {
     }
 
     /**
-     * Get SOP trends over time
+     * Get Playbook trends over time
      */
-    async getSOPTrends(userId: string, userRole: string, days: number = 30) {
+    async getPlaybookTrends(userId: string, userRole: string, days: number = 30) {
         const isAdmin = userRole === 'ADMIN';
         const whereClause = isAdmin ? {} : { createdById: userId };
 
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - days);
 
-        const sops = await prisma.sOP.findMany({
+        const playbooks = await prisma.sOP.findMany({
             where: {
                 ...whereClause,
                 createdAt: { gte: startDate },
@@ -147,13 +147,13 @@ export class AnalyticsService {
         // Group by date
         const trendData: Record<string, any> = {};
 
-        sops.forEach(sop => {
-            const dateKey = sop.createdAt.toISOString().split('T')[0];
+        playbooks.forEach(playbook => {
+            const dateKey = playbook.createdAt.toISOString().split('T')[0];
             if (!trendData[dateKey]) {
                 trendData[dateKey] = { total: 0, aiGenerated: 0, manual: 0 };
             }
             trendData[dateKey].total++;
-            if (sop.generatedByAI) {
+            if (playbook.generatedByAI) {
                 trendData[dateKey].aiGenerated++;
             } else {
                 trendData[dateKey].manual++;
