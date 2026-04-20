@@ -10,6 +10,6 @@ export const emailConfig = {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
     },
-    from: process.env.SMTP_FROM || '"SOP Master AI" <system@sopmaster.ai>',
-    adminEmail: process.env.ADMIN_EMAIL || 'admin@sopmaster.ai',
+    from: process.env.SMTP_FROM || '"FounderFlow AI" <system@founderflow.ai>',
+    adminEmail: process.env.ADMIN_EMAIL || 'admin@founderflow.ai',
 };

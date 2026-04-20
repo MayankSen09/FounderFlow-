@@ -12,13 +12,16 @@ export class AuthController {
             const { email, password, name, role } = req.body;
 
             // Validation
-            if (!email || !password || !name) {
-                res.status(400).json({ error: 'Email, password, and name are required' });
+            if (!email || typeof email !== 'string' || !/^\S+@\S+\.\S+$/.test(email)) {
+                res.status(400).json({ error: 'A valid email address is required' });
                 return;
             }
-
-            if (password.length < 6) {
-                res.status(400).json({ error: 'Password must be at least 6 characters' });
+            if (!password || typeof password !== 'string' || password.length < 8) {
+                res.status(400).json({ error: 'Password must be at least 8 characters long' });
+                return;
+            }
+            if (!name || typeof name !== 'string' || name.length > 50) {
+                res.status(400).json({ error: 'Name must be a valid string under 50 characters' });
                 return;
             }
 
@@ -47,8 +50,12 @@ export class AuthController {
             const { email, password } = req.body;
 
             // Validation
-            if (!email || !password) {
-                res.status(400).json({ error: 'Email and password are required' });
+            if (!email || typeof email !== 'string' || !/^\S+@\S+\.\S+$/.test(email)) {
+                res.status(400).json({ error: 'A valid email address is required' });
+                return;
+            }
+            if (!password || typeof password !== 'string') {
+                res.status(400).json({ error: 'Password is required' });
                 return;
             }
 

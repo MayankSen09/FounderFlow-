@@ -27,9 +27,8 @@ export const errorHandler = (
 
     // Send response
     res.status(statusCode).json({
-        error: message,
-        ...(err.details && { details: err.details }),
-        ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+        error: process.env.NODE_ENV === 'production' && statusCode >= 500 ? 'Internal Server Error' : message,
+        ...(err.details && process.env.NODE_ENV !== 'production' && { details: err.details }),
     });
 };
 

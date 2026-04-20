@@ -46,7 +46,7 @@ try {
 // Root endpoint - API information
 app.get('/', (_req, res) => {
     res.json({
-        name: 'SOP System Backend API',
+        name: 'FounderFlow Backend API',
         version: config.apiVersion,
         status: 'running',
         documentation: {
@@ -59,7 +59,7 @@ app.get('/', (_req, res) => {
                 dashboard: `/api/${config.apiVersion}/dashboard`,
             },
         },
-        message: 'Welcome to the SOP Management System API. Please use the endpoints listed above.',
+        message: 'Welcome to the FounderFlow API. Please use the endpoints listed above.',
     });
 });
 
@@ -84,7 +84,7 @@ const PORT = config.port;
 const server = app.listen(PORT, () => {
     logger.info(`
     ╔═══════════════════════════════════════╗
-    ║   SOP System Backend API              ║
+    ║   FounderFlow Backend API              ║
     ║   Environment: ${config.nodeEnv.padEnd(24)}║
     ║   Port: ${PORT.toString().padEnd(30)}║
     ║   API Version: ${config.apiVersion.padEnd(23)}║

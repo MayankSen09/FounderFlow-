@@ -93,14 +93,14 @@ export const EmailService = {
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #333;">Hi ${demoRequest.name},</h2>
-        <p>Thanks for your interest in SOP Master AI!</p>
+        <p>Thanks for your interest in FounderFlow AI!</p>
         <p>We've received your request for a demo. One of our strategy experts will review your details and get back to you within 24 hours to schedule a time that works best for you.</p>
         
         <p>In the meantime, feel free to check out our <a href="#">latest case studies</a>.</p>
         
         <br/>
         <p>Best regards,</p>
-        <p><strong>The SOP Master AI Team</strong></p>
+        <p><strong>The FounderFlow AI Team</strong></p>
       </div>
     `;
 

@@ -60,7 +60,7 @@ const config: Config = {
     redisUrl: process.env.REDIS_URL || 'redis://localhost:6379',
 
     // JWT
-    jwtSecret: process.env.JWT_SECRET || 'your-secret-key',
+    jwtSecret: process.env.JWT_SECRET as string,
     jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
     refreshTokenExpiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || '30d',
 
@@ -91,15 +91,18 @@ const config: Config = {
 };
 
 // Validation
+if (!config.jwtSecret) {
+    throw new Error('JWT_SECRET environment variable is strictly required for security.');
+}
+if (config.jwtSecret === 'your-secret-key' || config.jwtSecret.length < 32) {
+    console.warn('⚠️ WARNING: JWT_SECRET is weak. It should be securely generated and at least 32 characters long.');
+}
 if (config.nodeEnv === 'production') {
     if (!config.databaseUrl) {
         throw new Error('DATABASE_URL is required in production');
     }
     if (!config.googleAIKey) {
         throw new Error('GOOGLE_AI_API_KEY is required in production');
-    }
-    if (config.jwtSecret === 'your-secret-key') {
-        throw new Error('JWT_SECRET must be changed in production');
     }
 }
 
